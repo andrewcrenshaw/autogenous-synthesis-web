@@ -3,206 +3,259 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Autogenous Synthesis — Self-Evolving Development</title>
+  <title>autogenous-synthesis — Autonomous Development OS</title>
+  <meta name="description" content="An autonomous development OS — twelve specialized agents that plan, build, test, and ship code. The human sets direction. Everything else runs.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;0,6..72,700;1,6..72,400;1,6..72,600&family=Source+Sans+3:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #050508;
-      --surface: #0d0d14;
-      --border: #16161f;
-      --indigo: #4f46e5;
-      --indigo-bright: #6366f1;
-      --emerald: #10b981;
-      --text: #e8e8f0;
-      --muted: #52526b;
-      --mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', monospace;
-      --sans: 'Inter', system-ui, -apple-system, sans-serif;
+      --bg:        #f2efe7;
+      --bg-2:      #ebe8df;
+      --bg-3:      #e2ddd3;
+      --surface:   #ffffff;
+      --border:    #d8d3c8;
+      --amber:     #c89640;
+      --amber-h:   #a87c30;
+      --amber-dim: rgba(200,150,64,0.10);
+      --text:      #1a1814;
+      --body:      #3a3530;
+      --muted:     #7a7268;
+      --serif:     'Newsreader', Georgia, serif;
+      --sans:      'Source Sans 3', system-ui, sans-serif;
+      --mono:      'JetBrains Mono', monospace;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      background: var(--bg);
-      color: var(--text);
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(rgba(26,24,20,0.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(26,24,20,0.06) 1px, transparent 1px);
+      background-size: 40px 40px;
+      color: var(--body);
       font-family: var(--sans);
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      font-size: 1rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      position: relative;
     }
 
-    /* Rotating conic gradient background */
     body::before {
       content: '';
       position: fixed;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: conic-gradient(
-        from 0deg at 50% 50%,
-        transparent 0deg,
-        rgba(79, 70, 229, 0.04) 60deg,
-        transparent 120deg,
-        rgba(16, 185, 129, 0.03) 180deg,
-        transparent 240deg,
-        rgba(79, 70, 229, 0.04) 300deg,
-        transparent 360deg
-      );
-      animation: spin 30s linear infinite;
+      inset: 0;
       pointer-events: none;
       z-index: 0;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      background-repeat: repeat;
+      opacity: 0.5;
     }
 
-    @keyframes spin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
+    /* ─── SCROLL ANIMATIONS ─── */
+    .animate {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 0.55s ease, transform 0.55s ease;
     }
+    .animate.visible {
+      opacity: 1;
+      transform: none;
+    }
+    .animate-delay-1 { transition-delay: 0.08s; }
+    .animate-delay-2 { transition-delay: 0.16s; }
+    .animate-delay-3 { transition-delay: 0.24s; }
+    .animate-delay-4 { transition-delay: 0.32s; }
+    .animate-delay-5 { transition-delay: 0.40s; }
 
-    header {
+    /* ─── LAYOUT UTILITIES ─── */
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
       position: relative;
       z-index: 1;
-      padding: 1.75rem 3rem;
+    }
+
+    /* ─── HEADER ─── */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(242,239,231,0.92);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      height: 56px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      border-bottom: 1px solid var(--border);
     }
 
-    .logo {
+    .wordmark {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.55rem;
+      text-decoration: none;
     }
 
-    .logo-mark {
-      width: 28px;
-      height: 28px;
-      border-radius: 6px;
-      background: linear-gradient(135deg, var(--indigo), var(--emerald));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
+    .wordmark-square {
+      width: 16px;
+      height: 16px;
+      border-radius: 3px;
+      background: var(--amber);
+      flex-shrink: 0;
     }
 
-    .logo-text {
+    .wordmark-text {
       font-family: var(--mono);
-      font-size: 0.8rem;
-      letter-spacing: 0.05em;
+      font-size: 0.78rem;
+      font-weight: 500;
       color: var(--text);
+      letter-spacing: -0.01em;
     }
 
-    .logo-text span { color: var(--indigo-bright); }
-
-    .status-pill {
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-      font-family: var(--mono);
-      font-size: 0.7rem;
+    .header-link {
+      font-family: var(--sans);
+      font-size: 0.8rem;
+      font-weight: 500;
       color: var(--muted);
-      letter-spacing: 0.08em;
+      text-decoration: none;
+      letter-spacing: 0.01em;
+      transition: color 0.15s;
     }
+    .header-link:hover { color: var(--text); }
+    .header-link .arrow { font-style: normal; }
 
-    .status-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--emerald);
-      box-shadow: 0 0 8px var(--emerald);
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(0.8); }
-    }
-
-    main {
+    /* ─── HERO ─── */
+    .hero {
+      padding: 7rem 0 5rem;
       position: relative;
       z-index: 1;
-      flex: 1;
+    }
+
+    .hero-eyebrow {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 500;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.75rem;
+    }
+
+    .hero h1 {
+      font-family: var(--serif);
+      font-size: clamp(2.4rem, 5.5vw, 4.2rem);
+      font-weight: 400;
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      max-width: 14ch;
+      margin-bottom: 1.75rem;
+    }
+
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 600;
+    }
+
+    .hero-sub {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      color: var(--body);
+      max-width: 50ch;
+      margin-bottom: 3.5rem;
+    }
+
+    /* Stat strip */
+    .stat-strip {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      width: fit-content;
+      overflow: hidden;
+      margin-bottom: 3.5rem;
+    }
+
+    .stat-item {
+      padding: 1.1rem 2rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 5rem 2rem;
+      gap: 0.15rem;
+    }
+
+    .stat-item + .stat-item {
+      border-left: 1px solid var(--border);
+    }
+
+    .stat-num {
+      font-family: var(--serif);
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 1;
+      color: var(--text);
+    }
+
+    .stat-label {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
       text-align: center;
     }
 
-    .eyebrow {
+    /* Terminal block */
+    .terminal-wrap {
+      margin-bottom: 0.5rem;
+    }
+
+    .terminal-caption {
       font-family: var(--mono);
-      font-size: 0.7rem;
-      letter-spacing: 0.2em;
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--indigo-bright);
-      margin-bottom: 2rem;
-    }
-
-    h1 {
-      font-size: clamp(2rem, 6vw, 4.5rem);
-      font-weight: 800;
-      letter-spacing: -0.04em;
-      line-height: 1.05;
-      margin-bottom: 1.5rem;
-      max-width: 16ch;
-    }
-
-    h1 .gradient {
-      background: linear-gradient(90deg, var(--indigo-bright), var(--emerald));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .tagline {
-      font-size: clamp(0.95rem, 2vw, 1.1rem);
       color: var(--muted);
-      max-width: 500px;
-      line-height: 1.7;
-      margin-bottom: 4rem;
+      margin-bottom: 0.65rem;
     }
 
-    /* Terminal window */
-    .terminal {
+    .terminal-block {
       background: var(--surface);
       border: 1px solid var(--border);
-      border-radius: 12px;
-      width: 100%;
-      max-width: 560px;
-      text-align: left;
-      overflow: hidden;
-    }
-
-    .terminal-bar {
-      padding: 0.75rem 1rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-
-    .dot-r { width: 10px; height: 10px; border-radius: 50%; background: #ef4444; }
-    .dot-y { width: 10px; height: 10px; border-radius: 50%; background: #f59e0b; }
-    .dot-g { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; }
-
-    .terminal-body {
-      padding: 1.25rem 1.5rem;
+      border-left: 3px solid var(--amber);
+      border-radius: 4px;
+      padding: 1.2rem 1.5rem;
       font-family: var(--mono);
-      font-size: 0.78rem;
-      line-height: 1.9;
+      font-size: 0.8rem;
+      line-height: 1.85;
+      max-width: 520px;
     }
 
-    .t-prompt { color: var(--indigo-bright); }
+    .t-prompt { color: var(--amber); font-weight: 500; }
     .t-cmd { color: var(--text); }
     .t-out { color: var(--muted); }
-    .t-success { color: var(--emerald); }
+    .t-ok { color: #4a7c59; font-weight: 500; }
     .t-cursor {
       display: inline-block;
-      width: 8px;
-      height: 1em;
-      background: var(--indigo-bright);
-      vertical-align: middle;
-      animation: blink 1s step-end infinite;
+      width: 7px;
+      height: 0.9em;
+      background: var(--amber);
+      vertical-align: text-bottom;
+      animation: blink 1.1s step-end infinite;
     }
 
     @keyframes blink {
@@ -210,66 +263,711 @@
       50% { opacity: 0; }
     }
 
-    footer {
+    /* ─── DIVIDER ─── */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ─── SECTIONS ─── */
+    section {
+      padding: 6rem 0;
       position: relative;
       z-index: 1;
-      padding: 1.5rem 3rem;
-      text-align: center;
-      font-family: var(--mono);
-      font-size: 0.7rem;
-      color: var(--border);
-      border-top: 1px solid var(--border);
-      letter-spacing: 0.08em;
     }
 
-    footer a {
+    section + section {
+      border-top: 1px solid var(--border);
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 1.25rem;
+    }
+
+    h2 {
+      font-family: var(--serif);
+      font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+      font-weight: 600;
+      line-height: 1.18;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 1.25rem;
+    }
+
+    h2 em { font-style: italic; font-weight: 400; }
+
+    .section-intro {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: var(--body);
+      max-width: 56ch;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ─── PIPELINE ─── */
+    .pipeline-steps {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+      background: var(--surface);
+    }
+
+    .pipeline-step {
+      padding: 1.75rem 1.5rem;
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .pipeline-step:last-child { border-right: none; }
+
+    .step-num {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+
+    .step-name {
+      font-family: var(--serif);
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text);
+      line-height: 1.2;
+    }
+
+    .step-desc {
+      font-size: 0.84rem;
+      line-height: 1.6;
+      color: var(--body);
+      flex: 1;
+    }
+
+    .step-agents {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.3rem;
+      margin-top: 0.25rem;
+    }
+
+    .agent-pill {
+      font-family: var(--mono);
+      font-size: 0.6rem;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--amber-h);
+      background: var(--amber-dim);
+      border: 1px solid rgba(200,150,64,0.25);
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+    }
+
+    .pipeline-note {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-style: italic;
+      font-family: var(--serif);
+    }
+
+    /* ─── AGENTS ─── */
+    .agents-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .agent-card {
+      background: var(--surface);
+      padding: 1.5rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      transition: background 0.15s;
+    }
+
+    .agent-card:hover { background: var(--bg-2); }
+
+    .agent-name {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .agent-role {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--amber);
+    }
+
+    .agent-desc {
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--body);
+      margin-top: 0.2rem;
+    }
+
+    /* ─── PRODUCTS ─── */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.25rem;
+    }
+
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 1.75rem 1.75rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-decoration: none;
+      transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+    }
+
+    .product-card:hover {
+      border-color: var(--amber);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(26,24,20,0.08);
+    }
+
+    .product-name {
+      font-family: var(--serif);
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .product-desc {
+      font-size: 0.88rem;
+      line-height: 1.65;
+      color: var(--body);
+      flex: 1;
+    }
+
+    .product-link {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      letter-spacing: 0.08em;
+      color: var(--amber);
+      margin-top: 0.5rem;
+      text-transform: uppercase;
+    }
+
+    /* ─── PRINCIPLES ─── */
+    .principles-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.25rem;
+    }
+
+    .principle-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      border-radius: 4px;
+      padding: 1.5rem 1.75rem;
+    }
+
+    .principle-title {
+      font-family: var(--serif);
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .principle-body {
+      font-size: 0.9rem;
+      line-height: 1.7;
+      color: var(--body);
+    }
+
+    /* ─── CTA STRIP ─── */
+    .cta-section {
+      background: #1a1814;
+      border-top: 1px solid #2a2620;
+      padding: 6rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .cta-section::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(200,150,64,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(200,150,64,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
+
+    .cta-section h2 {
+      color: #f2efe7;
+      margin-bottom: 1rem;
+    }
+
+    .cta-body {
+      font-size: 1.05rem;
+      line-height: 1.7;
+      color: #9a9590;
+      max-width: 52ch;
+      margin-bottom: 2.5rem;
+    }
+
+    .cta-links {
+      display: flex;
+      gap: 1.25rem;
+      flex-wrap: wrap;
+    }
+
+    .cta-link-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #1a1814;
+      background: var(--amber);
+      text-decoration: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 4px;
+      transition: background 0.15s;
+    }
+
+    .cta-link-primary:hover { background: var(--amber-h); }
+
+    .cta-link-secondary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: var(--sans);
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #c0bbb3;
+      border: 1px solid #3a3530;
+      text-decoration: none;
+      padding: 0.7rem 1.4rem;
+      border-radius: 4px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+
+    .cta-link-secondary:hover {
+      border-color: #6a6560;
+      color: #f2efe7;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--bg-2);
+      border-top: 1px solid var(--border);
+      padding: 1.5rem 0;
+      position: relative;
+      z-index: 1;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .footer-left {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    .footer-right {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-right a {
       color: var(--muted);
       text-decoration: none;
+      transition: color 0.15s;
+    }
+    .footer-right a:hover { color: var(--amber); }
+    .footer-sep { color: var(--border); }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      .hero { padding: 4rem 0 3.5rem; }
+      .hero h1 { font-size: 2.2rem; }
+
+      .stat-strip {
+        flex-direction: row;
+        width: 100%;
+        justify-content: stretch;
+      }
+      .stat-item { flex: 1; padding: 0.9rem 1rem; }
+
+      .pipeline-steps {
+        grid-template-columns: 1fr;
+      }
+      .pipeline-step {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+      .pipeline-step:last-child { border-bottom: none; }
+
+      .agents-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .principles-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+      }
+
+      section { padding: 4rem 0; }
     }
 
-    footer a:hover { color: var(--indigo-bright); }
+    @media (max-width: 480px) {
+      .agents-grid { grid-template-columns: 1fr; }
+      .stat-strip { flex-direction: column; }
+      .stat-item + .stat-item { border-left: none; border-top: 1px solid var(--border); }
+    }
   </style>
 </head>
 <body>
+
+  <!-- ─── HEADER ─── -->
   <header>
-    <div class="logo">
-      <div class="logo-mark">⟳</div>
-      <div class="logo-text">autogenous<span>-synthesis</span></div>
-    </div>
-    <div class="status-pill">
-      <span class="status-dot"></span>
-      systems operational
+    <div class="header-inner">
+      <a href="#" class="wordmark">
+        <div class="wordmark-square"></div>
+        <span class="wordmark-text">autogenous-synthesis</span>
+      </a>
+      <a href="https://www.lexenne.com" class="header-link" target="_blank" rel="noopener">
+        A Lexenne project <span class="arrow">↗</span>
+      </a>
     </div>
   </header>
 
-  <main>
-    <p class="eyebrow">Agent Infrastructure</p>
-    <h1>Software that <span class="gradient">builds itself</span> better.</h1>
-    <p class="tagline">
-      Autogenous Synthesis is the development framework for agent-driven software — where AI agents plan, build, test, and improve the systems they run on.
-    </p>
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="container">
+      <p class="hero-eyebrow animate">Autonomous Development OS</p>
+      <h1 class="animate animate-delay-1">The system that <em>builds</em> the systems.</h1>
+      <p class="hero-sub animate animate-delay-2">
+        An autonomous development OS — twelve specialized agents that plan, build, test, and ship code. The human sets direction and approves at gates. Everything else runs.
+      </p>
 
-    <div class="terminal">
-      <div class="terminal-bar">
-        <div class="dot-r"></div>
-        <div class="dot-y"></div>
-        <div class="dot-g"></div>
+      <div class="stat-strip animate animate-delay-3">
+        <div class="stat-item">
+          <span class="stat-num">12</span>
+          <span class="stat-label">specialized agents</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">700+</span>
+          <span class="stat-label">tests per cycle</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-num">0</span>
+          <span class="stat-label">manual code reviews / feature</span>
+        </div>
       </div>
-      <div class="terminal-body">
-        <div><span class="t-prompt">$</span> <span class="t-cmd">/session bob PCC-2741</span></div>
-        <div class="t-out">→ registering session bob-2026-05-25-a3f8c2...</div>
-        <div class="t-out">→ scratchpad created, ticket claimed</div>
-        <div class="t-success">✓ SESSION STARTED — ready to build</div>
-        <div>&nbsp;</div>
-        <div><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
+
+      <div class="terminal-wrap animate animate-delay-4">
+        <p class="terminal-caption">A feature claim. Every session starts the same way.</p>
+        <div class="terminal-block">
+          <div><span class="t-prompt">$</span> <span class="t-cmd">/session bob PCC-2741</span></div>
+          <div class="t-out">→ registering session bob-2026-05-25-a3f8c2...</div>
+          <div class="t-out">→ scratchpad created, ticket claimed</div>
+          <div class="t-ok">✓ SESSION STARTED — ready to build</div>
+          <div>&nbsp;</div>
+          <div><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
+        </div>
       </div>
     </div>
-  </main>
+  </section>
 
+  <!-- ─── PIPELINE ─── -->
+  <section>
+    <div class="container">
+      <p class="section-label animate">How it works</p>
+      <h2 class="animate animate-delay-1">Plan. Build. Test. Review. Ship.</h2>
+      <p class="section-intro animate animate-delay-2">
+        Every feature follows the same five-phase sequence. Gates are mechanical, not social — a phase doesn't close until the criteria pass. No exceptions.
+      </p>
+
+      <div class="pipeline-steps animate animate-delay-3">
+        <div class="pipeline-step">
+          <span class="step-num">Phase 01</span>
+          <span class="step-name">Plan</span>
+          <p class="step-desc">Architect and Bea scope the work. Acceptance criteria are written before a line of code exists.</p>
+          <div class="step-agents">
+            <span class="agent-pill">Alex</span>
+            <span class="agent-pill">Bea</span>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">Phase 02</span>
+          <span class="step-name">Build</span>
+          <p class="step-desc">Bob writes code to pass the tests. Nothing more. Tessa's tests defined the target; Bob hits it.</p>
+          <div class="step-agents">
+            <span class="agent-pill">Bob</span>
+            <span class="agent-pill">Tessa</span>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">Phase 03</span>
+          <span class="step-name">Test</span>
+          <p class="step-desc">700-test suite runs. The gate stays red until every test passes. No workarounds, no waivers.</p>
+          <div class="step-agents">
+            <span class="agent-pill">Tessa</span>
+            <span class="agent-pill">Eval</span>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">Phase 04</span>
+          <span class="step-name">Review</span>
+          <p class="step-desc">Lint, eval, and Quinn review before anything closes. Sentinel checks for security violations.</p>
+          <div class="step-agents">
+            <span class="agent-pill">Quinn</span>
+            <span class="agent-pill">Eval</span>
+            <span class="agent-pill">Sentinel</span>
+          </div>
+        </div>
+        <div class="pipeline-step">
+          <span class="step-num">Phase 05</span>
+          <span class="step-name">Ship</span>
+          <p class="step-desc">Stewart closes the ticket and commits the work. Oscar queues what's next in the backlog.</p>
+          <div class="step-agents">
+            <span class="agent-pill">Stewart</span>
+            <span class="agent-pill">Oscar</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="pipeline-note animate animate-delay-4">
+        Nothing moves to the next phase until the gate passes. Nothing reaches done without clearing all five.
+      </p>
+    </div>
+  </section>
+
+  <!-- ─── AGENTS ─── -->
+  <section>
+    <div class="container">
+      <p class="section-label animate">The roster</p>
+      <h2 class="animate animate-delay-1">Twelve agents. Every role covered.</h2>
+      <p class="section-intro animate animate-delay-2">
+        Each agent has a bounded role, a skill set, and a defined authority ceiling. They collaborate under governance — they don't run loose.
+      </p>
+
+      <div class="agents-grid animate animate-delay-3">
+        <div class="agent-card">
+          <span class="agent-name">Bob</span>
+          <span class="agent-role">Builder</span>
+          <p class="agent-desc">Writes the code. Takes a ticket from in_progress to submission.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Tessa</span>
+          <span class="agent-role">Test Architect</span>
+          <p class="agent-desc">Writes tests before the code. Enforces RED → GREEN → REFACTOR.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Remy</span>
+          <span class="agent-role">Refactorer</span>
+          <p class="agent-desc">Cleans up after the feature lands. Doesn't add scope.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Stewart</span>
+          <span class="agent-role">Steward</span>
+          <p class="agent-desc">Owns the backlog. Sequences, monitors SLOs, runs the daily sweep.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Quinn</span>
+          <span class="agent-role">Reviewer</span>
+          <p class="agent-desc">Code review gate. Catches what tests miss.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Doug</span>
+          <span class="agent-role">Debugger</span>
+          <p class="agent-desc">Diagnoses and fixes failures. The crash expert.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Alex</span>
+          <span class="agent-role">Architect</span>
+          <p class="agent-desc">Designs before anyone codes. ADRs, tradeoffs, file-level specs.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Bea</span>
+          <span class="agent-role">Business Analyst</span>
+          <p class="agent-desc">Translates goals into tickets with machine-verifiable acceptance criteria.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Jerry</span>
+          <span class="agent-role">Jira</span>
+          <p class="agent-desc">Backlog integrity and cross-ticket dependency management.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Oscar</span>
+          <span class="agent-role">Orchestrator</span>
+          <p class="agent-desc">Queues work, routes agents, manages concurrency.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Eval</span>
+          <span class="agent-role">Evaluator</span>
+          <p class="agent-desc">Judges output quality against criteria. The automated reviewer.</p>
+        </div>
+        <div class="agent-card">
+          <span class="agent-name">Sentinel</span>
+          <span class="agent-role">Security</span>
+          <p class="agent-desc">Reviews for vulnerabilities, dependency risk, and governance violations.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRODUCTS ─── -->
+  <section>
+    <div class="container">
+      <p class="section-label animate">Built by Forge</p>
+      <h2 class="animate animate-delay-1">Running in production.</h2>
+      <p class="section-intro animate animate-delay-2">
+        These aren't demos. They're products the system built and continues to maintain — every ticket closed through the same pipeline described above.
+      </p>
+
+      <div class="products-grid animate animate-delay-3">
+        <a class="product-card" href="https://strata-work.com" target="_blank" rel="noopener">
+          <span class="product-name">Strata Work</span>
+          <p class="product-desc">An autonomous job search system. Eight agents, three-layer deduplication, fully local inference. Built and maintained by Forge.</p>
+          <span class="product-link">strata-work.com ↗</span>
+        </a>
+        <a class="product-card" href="https://lifewithpatina.com" target="_blank" rel="noopener">
+          <span class="product-name">Life with Patina</span>
+          <p class="product-desc">Purchase intelligence and household management. Two products built to last, both shipped by the same autonomous pipeline.</p>
+          <span class="product-link">lifewithpatina.com ↗</span>
+        </a>
+        <a class="product-card" href="https://genarch.dev" target="_blank" rel="noopener">
+          <span class="product-name">GenArch</span>
+          <p class="product-desc">The intelligence layer — Alexandria, SLF, and Forge. The infrastructure all Lexenne products share. autogenous-synthesis is Forge.</p>
+          <span class="product-link">genarch.dev ↗</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── PRINCIPLES ─── -->
+  <section>
+    <div class="container">
+      <p class="section-label animate">Design decisions</p>
+      <h2 class="animate animate-delay-1"><em>Architecture</em> that won't bend under load.</h2>
+      <p class="section-intro animate animate-delay-2">
+        The system was designed to hold its shape as it grows. These four constraints aren't incidental — they're what separates a development OS from a smarter task runner.
+      </p>
+
+      <div class="principles-grid animate animate-delay-3">
+        <div class="principle-card">
+          <p class="principle-title">Backlog as state machine</p>
+          <p class="principle-body">Not a task list. Tickets have states, transitions, guards, and owners. Ghost tickets and stale claims are structurally impossible — the schema enforces what process cannot.</p>
+        </div>
+        <div class="principle-card">
+          <p class="principle-title">TDD, enforced mechanically</p>
+          <p class="principle-body">Tests are written before code. RED → GREEN → REFACTOR is the sequence. No exceptions, because the gate won't open on a red suite regardless of who's asking.</p>
+        </div>
+        <div class="principle-card">
+          <p class="principle-title">Memory survives context limits</p>
+          <p class="principle-body">Session scratchpads, decision traces, and phase handoffs persist across context boundaries. Agents don't start cold — they pick up where the last one left off.</p>
+        </div>
+        <div class="principle-card">
+          <p class="principle-title">Bounded authority, always</p>
+          <p class="principle-body">Every agent has a defined ceiling. No agent can approve its own work, claim outside its role, or skip review. Governance is baked into the routing layer, not the prompt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CTA ─── -->
+  <section class="cta-section">
+    <div class="container">
+      <p class="section-label animate" style="color: var(--amber);">Get in touch</p>
+      <h2 class="animate animate-delay-1">See it in action.</h2>
+      <p class="cta-body animate animate-delay-2">
+        Contact us about how autogenous-synthesis could apply to your development workflow, or explore the GenArch infrastructure it runs on.
+      </p>
+      <div class="cta-links animate animate-delay-3">
+        <a href="mailto:imnaha67@gmail.com" class="cta-link-primary">Get in touch →</a>
+        <a href="https://genarch.dev" target="_blank" rel="noopener" class="cta-link-secondary">Explore GenArch →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
   <footer>
-    <a href="https://www.lexenne.com">A Lexenne project</a>
-    &nbsp;·&nbsp;
-    autogenous-synthesis.com
+    <div class="footer-inner">
+      <span class="footer-left">autogenous-synthesis.com</span>
+      <div class="footer-right">
+        <a href="https://www.lexenne.com" target="_blank" rel="noopener">A Lexenne project ↗</a>
+        <span class="footer-sep">·</span>
+        <a href="https://genarch.dev" target="_blank" rel="noopener">Built on GenArch ↗</a>
+      </div>
+    </div>
   </footer>
+
+  <script>
+    // Scroll reveal
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+
+    document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+    // Immediately reveal above-fold elements
+    document.querySelectorAll('.hero .animate').forEach(el => {
+      setTimeout(() => el.classList.add('visible'), 80);
+    });
+  </script>
 </body>
 </html>
