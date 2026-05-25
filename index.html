@@ -505,6 +505,76 @@
       color: var(--body);
     }
 
+    /* ─── AUTHORSHIP ─── */
+    .about-inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+
+    .about-name {
+      font-family: var(--serif);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      font-weight: 600;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .about-title {
+      font-family: var(--mono);
+      font-size: 0.7rem;
+      font-weight: 500;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 2rem;
+    }
+
+    .about-body {
+      font-size: 1rem;
+      line-height: 1.75;
+      color: var(--body);
+      max-width: 52ch;
+    }
+
+    .about-body p + p { margin-top: 1rem; }
+
+    .about-stats {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .about-stat {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--amber);
+      border-radius: 4px;
+      padding: 1.25rem 1.5rem;
+    }
+
+    .about-stat-num {
+      font-family: var(--serif);
+      font-size: 1.9rem;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      margin-bottom: 0.3rem;
+    }
+
+    .about-stat-label {
+      font-size: 0.85rem;
+      line-height: 1.5;
+      color: var(--body);
+    }
+
+    @media (max-width: 768px) {
+      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+    }
+
     /* ─── CTA STRIP ─── */
     .cta-section {
       background: #1a1814;
@@ -715,11 +785,12 @@
       </div>
 
       <div class="terminal-wrap animate animate-delay-4">
-        <p class="terminal-caption">A feature claim. Every session starts the same way.</p>
+        <p class="terminal-caption">Every session starts the same way.</p>
         <div class="terminal-block">
-          <div><span class="t-prompt">$</span> <span class="t-cmd">/session bob PCC-2741</span></div>
-          <div class="t-out">→ registering session bob-2026-05-25-a3f8c2...</div>
-          <div class="t-out">→ scratchpad created, ticket claimed</div>
+          <div><span class="t-prompt">$</span> <span class="t-cmd">/session bob — build async notification relay</span></div>
+          <div class="t-out">→ registering session bob-2026-05-21-a3f8c2...</div>
+          <div class="t-out">→ scratchpad created, context loaded</div>
+          <div class="t-out">→ acceptance criteria: 3 verifiable gates</div>
           <div class="t-ok">✓ SESSION STARTED — ready to build</div>
           <div>&nbsp;</div>
           <div><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
@@ -920,6 +991,37 @@
         <div class="principle-card">
           <p class="principle-title">Bounded authority, always</p>
           <p class="principle-body">Every agent has a defined ceiling. No agent can approve its own work, claim outside its role, or skip review. Governance is baked into the routing layer, not the prompt.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── AUTHORSHIP ─── -->
+  <section>
+    <div class="container">
+      <p class="section-label animate">The builder</p>
+      <div class="about-inner">
+        <div>
+          <h2 class="about-name animate animate-delay-1">Andrew Crenshaw</h2>
+          <p class="about-title animate animate-delay-2">Founder, Lexenne</p>
+          <div class="about-body animate animate-delay-3">
+            <p>I built autogenous-synthesis because I kept running into the same problem: enterprise software projects take too long, drift from their requirements, and lose institutional knowledge at every handoff. After 25 years in enterprise technology — and watching teams with access to good tools still ship slowly — I decided the constraint wasn't the tools. It was the workflow around them.</p>
+            <p>autogenous-synthesis is the result: a framework where specialized agents handle the repetitive mechanics of delivery — writing tests, reviewing code, updating documentation, sequencing the backlog — while humans stay in the loop at the decisions that actually matter. Every product in the Lexenne portfolio was built and is maintained by this system.</p>
+          </div>
+        </div>
+        <div class="about-stats animate animate-delay-2">
+          <div class="about-stat">
+            <div class="about-stat-num">3</div>
+            <div class="about-stat-label">Production products built and maintained by the system — Strata Work, Life with Patina, GenArch</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">700+</div>
+            <div class="about-stat-label">Automated tests run on every feature cycle. Nothing reaches done without a clean suite.</div>
+          </div>
+          <div class="about-stat">
+            <div class="about-stat-num">25 yrs</div>
+            <div class="about-stat-label">Enterprise technology experience across delivery, architecture, and product — the problem this solves is one I watched accumulate for decades.</div>
+          </div>
         </div>
       </div>
     </div>
