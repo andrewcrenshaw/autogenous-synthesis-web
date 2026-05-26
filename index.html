@@ -797,93 +797,6 @@
       color: var(--body);
     }
 
-    /* ── AUTHORSHIP ── */
-    .about-inner {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 4rem;
-      align-items: start;
-    }
-
-    .about-name {
-      font-family: var(--serif);
-      font-size: clamp(2rem, 4vw, 3.2rem);
-      font-weight: 400;
-      line-height: 1.1;
-      letter-spacing: -0.022em;
-      color: var(--text);
-      margin-bottom: 0.5rem;
-    }
-
-    .about-role {
-      font-family: var(--mono);
-      font-size: 0.65rem;
-      font-weight: 500;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ph);
-      margin-bottom: 2rem;
-    }
-
-    .about-body {
-      font-size: 1rem;
-      line-height: 1.8;
-      color: var(--body);
-      max-width: 54ch;
-    }
-
-    .about-body p + p { margin-top: 1rem; }
-
-    .about-right {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      background: var(--border);
-      border: 1px solid var(--border);
-      border-radius: 3px;
-      overflow: hidden;
-    }
-
-    .about-deck {
-      height: 180px;
-      overflow: hidden;
-    }
-
-    .about-deck img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-      opacity: 0.5;
-      filter: sepia(0.2);
-    }
-
-    .about-stat {
-      background: var(--surface);
-      padding: 1.1rem 1.5rem;
-      display: flex;
-      align-items: baseline;
-      gap: 1.1rem;
-    }
-
-    .about-stat + .about-stat { border-top: 1px solid var(--border); }
-
-    .about-stat-num {
-      font-family: var(--serif);
-      font-size: 1.85rem;
-      font-weight: 600;
-      color: var(--text);
-      line-height: 1;
-      flex-shrink: 0;
-      min-width: 3.5rem;
-    }
-
-    .about-stat-label {
-      font-size: 0.83rem;
-      line-height: 1.55;
-      color: var(--body);
-    }
 
     /* ── CTA ── */
     .cta-section {
@@ -1040,7 +953,6 @@
       .agents-grid { grid-template-columns: 1fr 1fr; }
       .products-grid { grid-template-columns: 1fr; }
       .principles-grid { grid-template-columns: 1fr; }
-      .about-inner { grid-template-columns: 1fr; gap: 2.5rem; }
       .footer-inner { flex-direction: column; align-items: flex-start; }
       section { padding: 4rem 0; }
     }
@@ -1218,62 +1130,32 @@
     <!-- PRINCIPLES -->
     <section>
       <div class="container">
-        <p class="section-label animate">Design decisions</p>
-        <h2 class="animate d1"><em>Architecture</em> that won't bend under load.</h2>
+        <p class="section-label animate">How it holds together</p>
+        <h2 class="animate d1">Built on the fault lines where enterprise delivery breaks.</h2>
         <p class="section-intro animate d2">
-          The system was designed to hold its shape as it grows. These four constraints aren't incidental — they're what separates a development OS from a smarter task runner.
+          Enterprise projects fail the same three ways: scope drift, institutional knowledge lost at handoffs, and slow velocity despite good tooling. These four constraints are a direct response to all three.
         </p>
 
         <div class="principles-grid animate d3">
           <div class="principle-card">
             <p class="principle-num">Constraint 01</p>
-            <p class="principle-title">Backlog as state machine</p>
-            <p class="principle-body">Not a task list. Tickets have states, transitions, guards, and owners. Ghost tickets and stale claims are structurally impossible — the schema enforces what process cannot.</p>
+            <p class="principle-title">Forge: ticket to ship, nothing skipped</p>
+            <p class="principle-body">Forge is the delivery engine — the visible core of autogenous-synthesis. Tickets move through defined states with mechanical gates at every transition. No manual approvals, no social pressure. Ghost tickets and stale claims are structurally impossible because the schema enforces what process cannot.</p>
           </div>
           <div class="principle-card">
             <p class="principle-num">Constraint 02</p>
-            <p class="principle-title">TDD, enforced mechanically</p>
-            <p class="principle-body">Tests are written before code. RED → GREEN → REFACTOR is the sequence. No exceptions, because the gate won't open on a red suite regardless of who's asking.</p>
+            <p class="principle-title">700+ tests. The gate doesn't negotiate.</p>
+            <p class="principle-body">Tests are written before code. RED → GREEN → REFACTOR — enforced by a suite that exceeds 700 tests and runs on every cycle. The gate won't open on a red suite for velocity, for deadlines, or for anyone. This constraint was non-negotiable by design.</p>
           </div>
           <div class="principle-card">
             <p class="principle-num">Constraint 03</p>
-            <p class="principle-title">Memory survives context limits</p>
-            <p class="principle-body">Session scratchpads, decision traces, and phase handoffs persist across context boundaries. Agents don't start cold — they pick up where the last one left off.</p>
+            <p class="principle-title">Institutional knowledge doesn't reset</p>
+            <p class="principle-body">Session scratchpads, decision traces, and phase handoffs persist across context limits through autogenous-synthesis's SLF layer. Agents don't start cold. The system accumulates context across every session and handoff — closing the knowledge gap that breaks enterprise projects at scale.</p>
           </div>
           <div class="principle-card">
             <p class="principle-num">Constraint 04</p>
-            <p class="principle-title">Bounded authority, always</p>
-            <p class="principle-body">Every agent has a defined ceiling. No agent can approve its own work, claim outside its role, or skip review. Governance is baked into the routing layer, not the prompt.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- AUTHORSHIP -->
-    <section>
-      <div class="container">
-        <p class="section-label animate">The builder</p>
-        <div class="about-inner">
-          <div>
-            <h2 class="about-name animate d1">Andrew Crenshaw</h2>
-            <p class="about-role animate d2">Founder, Lexenne</p>
-            <div class="about-body animate d3">
-              <p>I built autogenous-synthesis because I kept running into the same problem: enterprise software projects take too long, drift from their requirements, and lose institutional knowledge at every handoff. After 25 years in enterprise technology — and watching teams with access to good tools still ship slowly — I decided the constraint wasn't the tools. It was the workflow around them.</p>
-              <p>autogenous-synthesis is the result: a framework where specialized agents handle the repetitive mechanics of delivery — writing tests, reviewing code, updating documentation, sequencing the backlog — while humans stay in the loop at the decisions that actually matter. Every product in the Lexenne portfolio was built and is maintained by this system.</p>
-            </div>
-          </div>
-          <div class="about-right animate d2">
-            <div class="about-deck">
-              <img src="images/forge-deck.png" alt="Forge architecture">
-            </div>
-            <div class="about-stat">
-              <div class="about-stat-num">700+</div>
-              <div class="about-stat-label">Automated tests run on every feature cycle</div>
-            </div>
-            <div class="about-stat">
-              <div class="about-stat-num">25 yrs</div>
-              <div class="about-stat-label">Enterprise technology experience across delivery, architecture, and product</div>
-            </div>
+            <p class="principle-title">Agents handle mechanics. Humans decide what matters.</p>
+            <p class="principle-body">Every agent has a bounded role and a defined authority ceiling. No agent approves its own work, claims outside its role, or skips review. The repetitive mechanics of delivery — writing tests, sequencing the backlog, reviewing code — are automated. The decisions that actually matter stay with the human.</p>
           </div>
         </div>
       </div>
