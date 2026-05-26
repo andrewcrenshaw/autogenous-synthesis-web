@@ -13,29 +13,28 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      /* Base — cream / oatmeal paper */
-      --bg:        #f0ece2;
-      --bg-2:      #e8e3d8;
-      --bg-3:      #ddd8cc;
-      --surface:   #f8f5ef;
-      --border:    #cbc5b6;
+      --bg:          #f0ece2;
+      --bg-2:        #e8e3d8;
+      --bg-3:        #ddd8cc;
+      --surface:     #f8f5ef;
+      --border:      #cbc5b6;
 
-      /* Phosphor green — system-flow / active state */
-      --ph:        #00c864;
-      --ph-h:      #00a850;
-      --ph-dim:    rgba(0,200,100,0.07);
-      --ph-mid:    rgba(0,200,100,0.16);
-      --ph-border: rgba(0,200,100,0.28);
+      /* Phosphor green */
+      --ph:          #00c864;
+      --ph-h:        #00a850;
+      --ph-dim:      rgba(0,200,100,0.07);
+      --ph-border:   rgba(0,200,100,0.28);
 
-      /* Gunmetal — hardware / structure / dark surfaces */
-      --gm:        #242930;
-      --gm-2:      #2e353e;
-      --gm-border: #3a424c;
+      /* Gunmetal */
+      --gm:          #1c2128;
+      --gm-2:        #242b34;
+      --gm-border:   #323c48;
+      --gm-muted:    #5a6472;
 
       /* Text */
-      --text:      #1c1810;   /* deep espresso */
-      --body:      #3c3528;   /* dark bronze-brown */
-      --muted:     #7a7060;
+      --text:        #1c1810;
+      --body:        #3c3528;
+      --muted:       #7a7060;
 
       /* Type */
       --serif: 'Newsreader', Georgia, serif;
@@ -45,12 +44,9 @@
 
     html { scroll-behavior: smooth; }
 
+    /* Light cream sections get grid lines */
     body {
       background-color: var(--bg);
-      background-image:
-        linear-gradient(rgba(36,41,48,0.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(36,41,48,0.055) 1px, transparent 1px);
-      background-size: 36px 36px;
       color: var(--body);
       font-family: var(--sans);
       font-size: 1rem;
@@ -58,22 +54,28 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* Paper texture */
-    body::before {
+    /* Paper texture over cream sections only */
+    .cream-texture {
+      position: relative;
+    }
+    .cream-texture::before {
       content: '';
-      position: fixed;
+      position: absolute;
       inset: 0;
       pointer-events: none;
       z-index: 0;
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.032'/%3E%3C/svg%3E");
-      background-repeat: repeat;
+      background-image:
+        linear-gradient(rgba(36,41,48,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36,41,48,0.05) 1px, transparent 1px),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='400' height='400' filter='url(%23n)' opacity='0.028'/%3E%3C/svg%3E");
+      background-size: 36px 36px, 36px 36px, 400px 400px;
     }
 
     /* ── SCROLL REVEAL ── */
     .animate {
       opacity: 0;
       transform: translateY(18px);
-      transition: opacity 0.58s ease, transform 0.58s ease;
+      transition: opacity 0.6s ease, transform 0.6s ease;
     }
     .animate.visible { opacity: 1; transform: none; }
     .d1 { transition-delay: 0.08s; }
@@ -93,20 +95,22 @@
 
     /* ── HEADER ── */
     header {
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 100;
-      background: rgba(240,236,226,0.90);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
+      left: 0;
+      right: 0;
+      z-index: 200;
+      background: rgba(22,26,32,0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--gm-border);
     }
 
     .header-inner {
       max-width: 1100px;
       margin: 0 auto;
       padding: 0 2rem;
-      height: 56px;
+      height: 54px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -124,83 +128,131 @@
       height: 20px;
       flex-shrink: 0;
       display: block;
-      filter: brightness(0.3) sepia(1) hue-rotate(90deg) saturate(3) brightness(1.2);
+      /* tint to phosphor green */
+      filter: brightness(0) invert(1) sepia(1) hue-rotate(100deg) saturate(3) brightness(0.85);
     }
 
     .wordmark-text {
       font-family: var(--mono);
       font-size: 0.77rem;
       font-weight: 500;
-      color: var(--text);
+      color: #d4d0c8;
       letter-spacing: -0.01em;
     }
 
     .header-link {
       font-family: var(--mono);
-      font-size: 0.72rem;
-      font-weight: 400;
-      color: var(--muted);
+      font-size: 0.68rem;
+      color: var(--gm-muted);
       text-decoration: none;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       transition: color 0.15s;
     }
     .header-link:hover { color: var(--ph); }
 
-    /* ── HERO ── */
+    /* ── HERO — dark, full-bleed, forge-deck as background ── */
     .hero {
-      padding: 7rem 0 5rem;
+      min-height: 100svh;
+      background-color: var(--gm);
+      background-image: url('images/forge-deck.png');
+      background-size: cover;
+      background-position: center center;
       position: relative;
+      display: flex;
+      align-items: center;
+      padding-top: 54px; /* header height */
+    }
+
+    /* Dark overlay with subtle vignette */
+    .hero::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(ellipse at 60% 40%, rgba(0,200,100,0.04) 0%, transparent 60%),
+        linear-gradient(to bottom, rgba(22,26,32,0.78) 0%, rgba(22,26,32,0.65) 60%, rgba(22,26,32,0.90) 100%);
+      z-index: 0;
+    }
+
+    /* Fade at the very bottom to cream */
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 120px;
+      background: linear-gradient(to bottom, transparent, var(--bg));
       z-index: 1;
+      pointer-events: none;
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      padding: 5rem 0 8rem;
     }
 
     .hero-layout {
       display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 4.5rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
       align-items: center;
     }
 
     .hero-eyebrow {
       font-family: var(--mono);
-      font-size: 0.66rem;
+      font-size: 0.64rem;
       font-weight: 500;
-      letter-spacing: 0.2em;
+      letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--ph);
       margin-bottom: 1.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 1px;
+      background: var(--ph);
+      flex-shrink: 0;
     }
 
     .hero h1 {
       font-family: var(--serif);
-      font-size: clamp(2.4rem, 4.5vw, 3.8rem);
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
       font-weight: 300;
-      line-height: 1.1;
-      letter-spacing: -0.025em;
-      color: var(--text);
-      max-width: 15ch;
+      line-height: 1.08;
+      letter-spacing: -0.03em;
+      color: #edeae0;
+      max-width: 14ch;
       margin-bottom: 1.75rem;
     }
 
     .hero h1 em {
       font-style: italic;
       font-weight: 600;
+      color: #f5f2ec;
     }
 
     .hero-sub {
       font-size: 1.05rem;
       line-height: 1.78;
-      color: var(--body);
-      max-width: 48ch;
+      color: #9aa0a8;
+      max-width: 46ch;
       margin-bottom: 2.75rem;
     }
 
-    /* Stat strip */
+    /* Stat strip — dark surface */
     .stat-strip {
       display: flex;
       gap: 0;
-      border: 1px solid var(--border);
+      border: 1px solid var(--gm-border);
       border-radius: 3px;
-      background: var(--surface);
+      background: rgba(255,255,255,0.04);
       width: fit-content;
       overflow: hidden;
       margin-bottom: 2.75rem;
@@ -214,14 +266,14 @@
       gap: 0.15rem;
     }
 
-    .stat-item + .stat-item { border-left: 1px solid var(--border); }
+    .stat-item + .stat-item { border-left: 1px solid var(--gm-border); }
 
     .stat-num {
       font-family: var(--serif);
       font-size: 1.85rem;
       font-weight: 600;
       line-height: 1;
-      color: var(--text);
+      color: #edeae0;
     }
 
     .stat-label {
@@ -229,7 +281,7 @@
       font-size: 0.58rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--gm-muted);
       text-align: center;
     }
 
@@ -239,12 +291,12 @@
       font-size: 0.62rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--muted);
+      color: var(--gm-muted);
       margin-bottom: 0.6rem;
     }
 
     .terminal-block {
-      background: var(--gm);
+      background: rgba(12,16,22,0.80);
       border: 1px solid var(--gm-border);
       border-radius: 4px;
       padding: 1.25rem 1.5rem;
@@ -255,8 +307,8 @@
     }
 
     .t-prompt { color: var(--ph); font-weight: 500; }
-    .t-cmd    { color: #dcd8ce; }
-    .t-out    { color: #687070; }
+    .t-cmd    { color: #c8c4ba; }
+    .t-out    { color: #505860; }
     .t-ok     { color: var(--ph); font-weight: 500; }
     .t-cursor {
       display: inline-block;
@@ -272,35 +324,26 @@
       50%       { opacity: 0; }
     }
 
-    /* Hero chip panel */
+    /* Hero right — chip panel */
     .hero-chip-panel {
-      position: relative;
       display: flex;
       flex-direction: column;
       gap: 0.85rem;
+      align-self: center;
     }
 
     .hero-chip-frame {
       position: relative;
-      background: var(--gm);
-      border: 1px solid var(--gm-border);
+      border: 1px solid rgba(0,200,100,0.20);
       border-radius: 6px;
       overflow: hidden;
-    }
-
-    .hero-chip-frame::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border: 1px solid var(--ph-border);
-      border-radius: 6px;
-      pointer-events: none;
+      background: rgba(12,16,22,0.6);
     }
 
     .hero-chip-frame img {
       width: 100%;
       display: block;
-      mix-blend-mode: lighten;
+      mix-blend-mode: screen;
     }
 
     .hero-chip-meta {
@@ -308,22 +351,22 @@
       align-items: center;
       justify-content: space-between;
       padding: 0.6rem 0.9rem;
-      background: var(--gm);
+      background: rgba(12,16,22,0.6);
       border: 1px solid var(--gm-border);
       border-radius: 3px;
     }
 
     .hero-chip-label {
       font-family: var(--mono);
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.14em;
       text-transform: uppercase;
-      color: #687070;
+      color: var(--gm-muted);
     }
 
     .hero-chip-status {
       font-family: var(--mono);
-      font-size: 0.6rem;
+      font-size: 0.58rem;
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: var(--ph);
@@ -342,10 +385,18 @@
 
     @keyframes pulse {
       0%, 100% { opacity: 1; }
-      50%       { opacity: 0.35; }
+      50%       { opacity: 0.3; }
     }
 
-    /* ── SECTIONS ── */
+    /* ── CREAM SECTIONS ── */
+    .sections-cream {
+      background-color: var(--bg);
+      background-image:
+        linear-gradient(rgba(36,41,48,0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36,41,48,0.05) 1px, transparent 1px);
+      background-size: 36px 36px;
+    }
+
     section {
       padding: 6rem 0;
       position: relative;
@@ -384,22 +435,29 @@
       margin-bottom: 3.5rem;
     }
 
-    /* ── PIPELINE ── */
+    /* ── PIPELINE — parallax behind content ── */
     .pipeline-section {
       position: relative;
       overflow: hidden;
+      background-color: var(--bg-2);
+      background-image:
+        linear-gradient(rgba(36,41,48,0.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(36,41,48,0.055) 1px, transparent 1px);
+      background-size: 36px 36px;
     }
 
     .pipeline-parallax {
       position: absolute;
       inset: 0;
-      background-image: url('images/forge-chip%20schema.png');
+      background-image: url('images/forge-chip-schema.png');
       background-attachment: fixed;
-      background-size: cover;
+      background-size: 900px auto;
       background-position: center center;
-      opacity: 0.055;
+      background-repeat: no-repeat;
+      opacity: 0.14;
       pointer-events: none;
       z-index: 0;
+      mix-blend-mode: multiply;
     }
 
     .pipeline-steps {
@@ -409,7 +467,7 @@
       border: 1px solid var(--border);
       border-radius: 3px;
       overflow: hidden;
-      background: var(--surface);
+      background: rgba(248,245,239,0.92);
     }
 
     .pipeline-step {
@@ -423,7 +481,7 @@
     }
 
     .pipeline-step:last-child { border-right: none; }
-    .pipeline-step:hover { background: var(--bg-2); }
+    .pipeline-step:hover { background: rgba(240,236,226,0.98); }
 
     .pipeline-step::before {
       content: '';
@@ -545,62 +603,44 @@
       margin-top: 0.15rem;
     }
 
-    /* ── SCHEMA DIVIDER ── */
-    .schema-divider {
+    /* ── REVIEW IMAGE DIVIDER ── */
+    .image-divider {
       border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
       overflow: hidden;
       position: relative;
-      z-index: 1;
+      height: 300px;
     }
 
-    .schema-divider-inner {
-      height: 280px;
-      overflow: hidden;
-      position: relative;
-    }
-
-    .schema-divider-inner::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(to right,
-        var(--bg) 0%,
-        transparent 20%,
-        transparent 80%,
-        var(--bg) 100%
-      );
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .schema-divider-inner::after {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 60px;
-      background: linear-gradient(to bottom, var(--bg), transparent);
-      z-index: 1;
-      pointer-events: none;
-    }
-
-    .schema-divider img {
+    .image-divider img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center;
       display: block;
-      opacity: 0.18;
-      filter: sepia(0.3);
+      opacity: 0.22;
+      filter: sepia(0.25);
     }
 
-    .schema-divider-label {
+    .image-divider::before {
+      content: '';
       position: absolute;
-      bottom: 1.25rem;
+      inset: 0;
+      background:
+        linear-gradient(to right, var(--bg) 0%, transparent 18%, transparent 82%, var(--bg) 100%),
+        linear-gradient(to bottom, var(--bg) 0%, transparent 25%, transparent 75%, var(--bg) 100%);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .image-divider-label {
+      position: absolute;
+      bottom: 50%;
       left: 50%;
-      transform: translateX(-50%);
+      transform: translate(-50%, 50%);
       font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.2em;
+      font-size: 0.58rem;
+      letter-spacing: 0.24em;
       text-transform: uppercase;
       color: var(--ph);
       z-index: 2;
@@ -674,47 +714,47 @@
       text-transform: uppercase;
     }
 
-    /* Forge deck strip */
-    .forge-strip {
+    /* forge-tile strip below products */
+    .tile-strip {
       margin-top: 1.75rem;
+      height: 180px;
       border: 1px solid var(--border);
       border-radius: 3px;
       overflow: hidden;
-      height: 200px;
       position: relative;
     }
 
-    .forge-strip img {
+    .tile-strip img {
       width: 100%;
       height: 100%;
       object-fit: cover;
       object-position: center;
       display: block;
-      opacity: 0.55;
-      filter: sepia(0.2);
+      opacity: 0.40;
+      filter: sepia(0.15);
     }
 
-    .forge-strip::before {
+    .tile-strip::before {
       content: '';
       position: absolute;
       inset: 0;
-      background: linear-gradient(to right,
+      background: linear-gradient(
+        to right,
         var(--surface) 0%,
-        transparent 15%,
-        transparent 85%,
+        transparent 20%,
+        transparent 80%,
         var(--surface) 100%
       );
       z-index: 1;
-      pointer-events: none;
     }
 
-    .forge-strip-label {
+    .tile-strip-label {
       position: absolute;
       bottom: 1rem;
       right: 1.25rem;
       font-family: var(--mono);
-      font-size: 0.6rem;
-      letter-spacing: 0.16em;
+      font-size: 0.58rem;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
       color: var(--ph);
       z-index: 2;
@@ -734,7 +774,6 @@
     .principle-card {
       background: var(--surface);
       padding: 2rem;
-      position: relative;
       transition: background 0.15s;
     }
 
@@ -833,9 +872,7 @@
       gap: 1.1rem;
     }
 
-    .about-stat + .about-stat {
-      border-top: 1px solid var(--border);
-    }
+    .about-stat + .about-stat { border-top: 1px solid var(--border); }
 
     .about-stat-num {
       font-family: var(--serif);
@@ -855,9 +892,12 @@
 
     /* ── CTA ── */
     .cta-section {
-      background: var(--gm);
-      border-top: 1px solid #1a1f26;
-      padding: 6rem 0;
+      background-color: var(--gm);
+      background-image: url('images/forge-review.png');
+      background-size: cover;
+      background-position: center;
+      border-top: 1px solid #141920;
+      padding: 7rem 0;
       position: relative;
       z-index: 1;
     }
@@ -866,20 +906,31 @@
       content: '';
       position: absolute;
       inset: 0;
+      background:
+        linear-gradient(to right, rgba(22,26,32,0.96) 0%, rgba(22,26,32,0.80) 100%);
+      z-index: 0;
+    }
+
+    .cta-section::after {
+      content: '';
+      position: absolute;
+      inset: 0;
       background-image:
         linear-gradient(rgba(0,200,100,0.025) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0,200,100,0.025) 1px, transparent 1px);
       background-size: 36px 36px;
+      z-index: 0;
       pointer-events: none;
     }
 
+    .cta-section .container { z-index: 1; }
     .cta-section .section-label { color: var(--ph); }
     .cta-section h2 { color: #edeae0; font-weight: 300; }
 
     .cta-body {
       font-size: 1.05rem;
       line-height: 1.75;
-      color: #7a8080;
+      color: #6a7278;
       max-width: 52ch;
       margin-bottom: 2.5rem;
     }
@@ -916,8 +967,8 @@
       font-size: 0.78rem;
       font-weight: 400;
       letter-spacing: 0.06em;
-      color: #7a8080;
-      border: 1px solid #3a424c;
+      color: #6a7278;
+      border: 1px solid var(--gm-border);
       text-decoration: none;
       padding: 0.75rem 1.5rem;
       border-radius: 3px;
@@ -931,8 +982,8 @@
 
     /* ── FOOTER ── */
     footer {
-      background: var(--bg-2);
-      border-top: 1px solid var(--border);
+      background: var(--gm);
+      border-top: 1px solid #141920;
       padding: 1.5rem 0;
       position: relative;
       z-index: 1;
@@ -951,28 +1002,28 @@
 
     .footer-left {
       font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--muted);
-      letter-spacing: 0.05em;
+      font-size: 0.67rem;
+      color: var(--gm-muted);
+      letter-spacing: 0.06em;
     }
 
     .footer-right {
       font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--muted);
-      letter-spacing: 0.05em;
+      font-size: 0.67rem;
+      color: var(--gm-muted);
+      letter-spacing: 0.06em;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
     .footer-right a {
-      color: var(--muted);
+      color: var(--gm-muted);
       text-decoration: none;
       transition: color 0.15s;
     }
     .footer-right a:hover { color: var(--ph); }
-    .footer-sep { color: var(--border); }
+    .footer-sep { color: var(--gm-border); }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
@@ -981,8 +1032,9 @@
     }
 
     @media (max-width: 768px) {
-      .hero { padding: 4rem 0 3.5rem; }
-      .hero h1 { font-size: 2.2rem; }
+      .hero { min-height: auto; }
+      .hero-inner { padding: 3.5rem 0 6rem; }
+      .hero h1 { font-size: 2.4rem; }
 
       .stat-strip { width: 100%; }
       .stat-item { flex: 1; padding: 0.9rem 1rem; }
@@ -1002,13 +1054,13 @@
     @media (max-width: 480px) {
       .agents-grid { grid-template-columns: 1fr; }
       .stat-strip { flex-direction: column; width: 100%; }
-      .stat-item + .stat-item { border-left: none; border-top: 1px solid var(--border); }
+      .stat-item + .stat-item { border-left: none; border-top: 1px solid var(--gm-border); }
     }
   </style>
 </head>
 <body>
 
-  <!-- HEADER -->
+  <!-- HEADER — fixed, dark glass -->
   <header>
     <div class="header-inner">
       <a href="#" class="wordmark">
@@ -1021,317 +1073,322 @@
     </div>
   </header>
 
-  <!-- HERO -->
+  <!-- HERO — forge-deck.png full bleed -->
   <section class="hero">
-    <div class="container">
-      <div class="hero-layout">
+    <div class="hero-inner">
+      <div class="container">
+        <div class="hero-layout">
 
-        <div class="hero-left">
-          <p class="hero-eyebrow animate">Autonomous Development OS</p>
-          <h1 class="animate d1">The system that <em>builds</em> the systems.</h1>
-          <p class="hero-sub animate d2">
-            An autonomous development OS — twelve specialized agents that plan, build, test, and ship code. The human sets direction and approves at gates. Everything else runs.
-          </p>
+          <div>
+            <p class="hero-eyebrow animate">Autonomous Development OS</p>
+            <h1 class="animate d1">The system that <em>builds</em> the systems.</h1>
+            <p class="hero-sub animate d2">
+              An autonomous development OS — twelve specialized agents that plan, build, test, and ship code. The human sets direction and approves at gates. Everything else runs.
+            </p>
 
-          <div class="stat-strip animate d3">
-            <div class="stat-item">
-              <span class="stat-num">12</span>
-              <span class="stat-label">agents</span>
+            <div class="stat-strip animate d3">
+              <div class="stat-item">
+                <span class="stat-num">12</span>
+                <span class="stat-label">agents</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num">700+</span>
+                <span class="stat-label">tests / cycle</span>
+              </div>
+              <div class="stat-item">
+                <span class="stat-num">0</span>
+                <span class="stat-label">manual reviews</span>
+              </div>
             </div>
-            <div class="stat-item">
-              <span class="stat-num">700+</span>
-              <span class="stat-label">tests / cycle</span>
-            </div>
-            <div class="stat-item">
-              <span class="stat-num">0</span>
-              <span class="stat-label">manual reviews</span>
-            </div>
-          </div>
 
-          <div class="animate d4">
-            <p class="terminal-caption">Every session starts the same way.</p>
-            <div class="terminal-block">
-              <div><span class="t-prompt">$</span> <span class="t-cmd">/session bob — build async notification relay</span></div>
-              <div class="t-out">→ registering session bob-2026-05-21-a3f8c2...</div>
-              <div class="t-out">→ scratchpad created, context loaded</div>
-              <div class="t-out">→ acceptance criteria: 3 verifiable gates</div>
-              <div class="t-ok">✓ SESSION STARTED — ready to build</div>
-              <div>&nbsp;</div>
-              <div><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
+            <div class="animate d4">
+              <p class="terminal-caption">Every session starts the same way.</p>
+              <div class="terminal-block">
+                <div><span class="t-prompt">$</span> <span class="t-cmd">/session bob — build async notification relay</span></div>
+                <div class="t-out">→ registering session bob-2026-05-21-a3f8c2...</div>
+                <div class="t-out">→ scratchpad created, context loaded</div>
+                <div class="t-out">→ acceptance criteria: 3 verifiable gates</div>
+                <div class="t-ok">✓ SESSION STARTED — ready to build</div>
+                <div>&nbsp;</div>
+                <div><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="hero-chip-panel animate d2">
-          <div class="hero-chip-frame">
-            <img src="images/forge-%20chip%20isolated.png" alt="Forge chip — autonomous development runtime">
+          <div class="hero-chip-panel animate d2">
+            <div class="hero-chip-frame">
+              <img src="images/forge-chip-isolated.png" alt="Forge chip — autonomous development runtime">
+            </div>
+            <div class="hero-chip-meta">
+              <span class="hero-chip-label">forge-chip.v2 — agent dispatch runtime</span>
+              <span class="hero-chip-status">
+                <span class="status-dot"></span>
+                online
+              </span>
+            </div>
           </div>
-          <div class="hero-chip-meta">
-            <span class="hero-chip-label">forge-chip.v2 — agent dispatch runtime</span>
-            <span class="hero-chip-status">
-              <span class="status-dot"></span>
-              online
-            </span>
-          </div>
-        </div>
 
-      </div>
-    </div>
-  </section>
-
-  <!-- PIPELINE -->
-  <section class="pipeline-section">
-    <div class="pipeline-parallax"></div>
-    <div class="container">
-      <p class="section-label animate">How it works</p>
-      <h2 class="animate d1">Plan. <strong>Build.</strong> Test. Review. Ship.</h2>
-      <p class="section-intro animate d2">
-        Every feature follows the same five-phase sequence. Gates are mechanical, not social — a phase doesn't close until the criteria pass. No exceptions.
-      </p>
-
-      <div class="pipeline-steps animate d3">
-        <div class="pipeline-step">
-          <span class="step-num">Phase 01</span>
-          <span class="step-name">Plan</span>
-          <p class="step-desc">Architect and Bea scope the work. Acceptance criteria are written before a line of code exists.</p>
-          <div class="step-agents">
-            <span class="agent-pill">Alex</span>
-            <span class="agent-pill">Bea</span>
-          </div>
-        </div>
-        <div class="pipeline-step">
-          <span class="step-num">Phase 02</span>
-          <span class="step-name">Build</span>
-          <p class="step-desc">Bob writes code to pass the tests. Nothing more. Tessa's tests defined the target; Bob hits it.</p>
-          <div class="step-agents">
-            <span class="agent-pill">Bob</span>
-            <span class="agent-pill">Tessa</span>
-          </div>
-        </div>
-        <div class="pipeline-step">
-          <span class="step-num">Phase 03</span>
-          <span class="step-name">Test</span>
-          <p class="step-desc">700-test suite runs. The gate stays red until every test passes. No workarounds, no waivers.</p>
-          <div class="step-agents">
-            <span class="agent-pill">Tessa</span>
-            <span class="agent-pill">Evelyn</span>
-          </div>
-        </div>
-        <div class="pipeline-step">
-          <span class="step-num">Phase 04</span>
-          <span class="step-name">Review</span>
-          <p class="step-desc">Lint, eval, and Quinn review before anything closes. Sentinel checks for security violations.</p>
-          <div class="step-agents">
-            <span class="agent-pill">Quinn</span>
-            <span class="agent-pill">Evelyn</span>
-            <span class="agent-pill">Sentinel</span>
-          </div>
-        </div>
-        <div class="pipeline-step">
-          <span class="step-num">Phase 05</span>
-          <span class="step-name">Ship</span>
-          <p class="step-desc">Stewart closes the ticket and commits the work. Oscar queues what's next in the backlog.</p>
-          <div class="step-agents">
-            <span class="agent-pill">Stewart</span>
-            <span class="agent-pill">Oscar</span>
-          </div>
-        </div>
-      </div>
-
-      <p class="pipeline-note animate d4">
-        Nothing moves to the next phase until the gate passes. Nothing reaches done without clearing all five.
-      </p>
-    </div>
-  </section>
-
-  <!-- AGENTS -->
-  <section>
-    <div class="container">
-      <p class="section-label animate">The roster</p>
-      <h2 class="animate d1">Twelve agents. <em>Every role covered.</em></h2>
-      <p class="section-intro animate d2">
-        Each agent has a bounded role, a skill set, and a defined authority ceiling. They collaborate under governance — they don't run loose.
-      </p>
-
-      <div class="agents-grid animate d3">
-        <div class="agent-card">
-          <span class="agent-name">Bob</span>
-          <span class="agent-role">Builder</span>
-          <p class="agent-desc">Writes the code. Takes a ticket from in_progress to submission.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Tessa</span>
-          <span class="agent-role">Test Architect</span>
-          <p class="agent-desc">Writes tests before the code. Enforces RED → GREEN → REFACTOR.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Remy</span>
-          <span class="agent-role">Refactorer</span>
-          <p class="agent-desc">Cleans up after the feature lands. Doesn't add scope.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Stewart</span>
-          <span class="agent-role">Steward</span>
-          <p class="agent-desc">Owns the backlog. Sequences, monitors SLOs, runs the daily sweep.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Quinn</span>
-          <span class="agent-role">Reviewer</span>
-          <p class="agent-desc">Code review gate. Catches what tests miss.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Doug</span>
-          <span class="agent-role">Debugger</span>
-          <p class="agent-desc">Diagnoses and fixes failures. The crash expert.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Alex</span>
-          <span class="agent-role">Architect</span>
-          <p class="agent-desc">Designs before anyone codes. ADRs, tradeoffs, file-level specs.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Bea</span>
-          <span class="agent-role">Business Analyst</span>
-          <p class="agent-desc">Translates goals into tickets with machine-verifiable acceptance criteria.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Jerry</span>
-          <span class="agent-role">Jira</span>
-          <p class="agent-desc">Backlog integrity and cross-ticket dependency management.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Oscar</span>
-          <span class="agent-role">Orchestrator</span>
-          <p class="agent-desc">Queues work, routes agents, manages concurrency.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Evelyn</span>
-          <span class="agent-role">Evaluator</span>
-          <p class="agent-desc">Judges output quality against criteria. The automated reviewer.</p>
-        </div>
-        <div class="agent-card">
-          <span class="agent-name">Sentinel</span>
-          <span class="agent-role">Security</span>
-          <p class="agent-desc">Reviews for vulnerabilities, dependency risk, and governance violations.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- SCHEMA DIVIDER — woven complexity -->
-  <div class="schema-divider">
-    <div class="schema-divider-inner">
-      <img src="images/forge-chip%20schema.png" alt="">
-      <span class="schema-divider-label">Forge — interwoven agent architecture</span>
-    </div>
-  </div>
+  <!-- CREAM SECTIONS WRAPPER -->
+  <div class="sections-cream">
 
-  <!-- PRODUCTS -->
-  <section>
-    <div class="container">
-      <p class="section-label animate">Built by Forge</p>
-      <h2 class="animate d1">What the system is building.</h2>
-      <p class="section-intro animate d2">
-        Three products in active development — each built and iterated on through the same pipeline described above. Every ticket, test, and commit goes through Forge.
-      </p>
+    <!-- PIPELINE — forge-chip-schema parallax -->
+    <section class="pipeline-section">
+      <div class="pipeline-parallax"></div>
+      <div class="container">
+        <p class="section-label animate">How it works</p>
+        <h2 class="animate d1">Plan. <strong>Build.</strong> Test. Review. Ship.</h2>
+        <p class="section-intro animate d2">
+          Every feature follows the same five-phase sequence. Gates are mechanical, not social — a phase doesn't close until the criteria pass. No exceptions.
+        </p>
 
-      <div class="products-grid animate d3">
-        <a class="product-card" href="https://strata-work.com" target="_blank" rel="noopener">
-          <span class="product-tag">Active development</span>
-          <span class="product-name">Strata Work</span>
-          <p class="product-desc">An autonomous job search system. Eight agents, three-layer deduplication, fully local inference.</p>
-          <span class="product-link">strata-work.com ↗</span>
-        </a>
-        <a class="product-card" href="https://lifewithpatina.com" target="_blank" rel="noopener">
-          <span class="product-tag">In definition</span>
-          <span class="product-name">Life with Patina</span>
-          <p class="product-desc">Purchase intelligence and household management. Two consumer products designed and scoped through the same pipeline.</p>
-          <span class="product-link">lifewithpatina.com ↗</span>
-        </a>
-        <a class="product-card" href="https://genarch.dev" target="_blank" rel="noopener">
-          <span class="product-tag">Infrastructure</span>
-          <span class="product-name">GenArch</span>
-          <p class="product-desc">The intelligence layer — Alexandria, SLF, and Forge. The shared infrastructure across all Lexenne products.</p>
-          <span class="product-link">genarch.dev ↗</span>
-        </a>
+        <div class="pipeline-steps animate d3">
+          <div class="pipeline-step">
+            <span class="step-num">Phase 01</span>
+            <span class="step-name">Plan</span>
+            <p class="step-desc">Architect and Bea scope the work. Acceptance criteria are written before a line of code exists.</p>
+            <div class="step-agents">
+              <span class="agent-pill">Alex</span>
+              <span class="agent-pill">Bea</span>
+            </div>
+          </div>
+          <div class="pipeline-step">
+            <span class="step-num">Phase 02</span>
+            <span class="step-name">Build</span>
+            <p class="step-desc">Bob writes code to pass the tests. Nothing more. Tessa's tests defined the target; Bob hits it.</p>
+            <div class="step-agents">
+              <span class="agent-pill">Bob</span>
+              <span class="agent-pill">Tessa</span>
+            </div>
+          </div>
+          <div class="pipeline-step">
+            <span class="step-num">Phase 03</span>
+            <span class="step-name">Test</span>
+            <p class="step-desc">700-test suite runs. The gate stays red until every test passes. No workarounds, no waivers.</p>
+            <div class="step-agents">
+              <span class="agent-pill">Tessa</span>
+              <span class="agent-pill">Evelyn</span>
+            </div>
+          </div>
+          <div class="pipeline-step">
+            <span class="step-num">Phase 04</span>
+            <span class="step-name">Review</span>
+            <p class="step-desc">Lint, eval, and Quinn review before anything closes. Sentinel checks for security violations.</p>
+            <div class="step-agents">
+              <span class="agent-pill">Quinn</span>
+              <span class="agent-pill">Evelyn</span>
+              <span class="agent-pill">Sentinel</span>
+            </div>
+          </div>
+          <div class="pipeline-step">
+            <span class="step-num">Phase 05</span>
+            <span class="step-name">Ship</span>
+            <p class="step-desc">Stewart closes the ticket and commits the work. Oscar queues what's next in the backlog.</p>
+            <div class="step-agents">
+              <span class="agent-pill">Stewart</span>
+              <span class="agent-pill">Oscar</span>
+            </div>
+          </div>
+        </div>
+
+        <p class="pipeline-note animate d4">
+          Nothing moves to the next phase until the gate passes. Nothing reaches done without clearing all five.
+        </p>
       </div>
+    </section>
 
-      <div class="forge-strip animate d4">
-        <img src="images/forge-deck.png" alt="Forge deck — agent dispatch layer">
-        <span class="forge-strip-label">forge-deck.v2 — agent dispatch layer</span>
+    <!-- AGENTS -->
+    <section>
+      <div class="container">
+        <p class="section-label animate">The roster</p>
+        <h2 class="animate d1">Twelve agents. <em>Every role covered.</em></h2>
+        <p class="section-intro animate d2">
+          Each agent has a bounded role, a skill set, and a defined authority ceiling. They collaborate under governance — they don't run loose.
+        </p>
+
+        <div class="agents-grid animate d3">
+          <div class="agent-card">
+            <span class="agent-name">Bob</span>
+            <span class="agent-role">Builder</span>
+            <p class="agent-desc">Writes the code. Takes a ticket from in_progress to submission.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Tessa</span>
+            <span class="agent-role">Test Architect</span>
+            <p class="agent-desc">Writes tests before the code. Enforces RED → GREEN → REFACTOR.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Remy</span>
+            <span class="agent-role">Refactorer</span>
+            <p class="agent-desc">Cleans up after the feature lands. Doesn't add scope.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Stewart</span>
+            <span class="agent-role">Steward</span>
+            <p class="agent-desc">Owns the backlog. Sequences, monitors SLOs, runs the daily sweep.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Quinn</span>
+            <span class="agent-role">Reviewer</span>
+            <p class="agent-desc">Code review gate. Catches what tests miss.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Doug</span>
+            <span class="agent-role">Debugger</span>
+            <p class="agent-desc">Diagnoses and fixes failures. The crash expert.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Alex</span>
+            <span class="agent-role">Architect</span>
+            <p class="agent-desc">Designs before anyone codes. ADRs, tradeoffs, file-level specs.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Bea</span>
+            <span class="agent-role">Business Analyst</span>
+            <p class="agent-desc">Translates goals into tickets with machine-verifiable acceptance criteria.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Jerry</span>
+            <span class="agent-role">Jira</span>
+            <p class="agent-desc">Backlog integrity and cross-ticket dependency management.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Oscar</span>
+            <span class="agent-role">Orchestrator</span>
+            <p class="agent-desc">Queues work, routes agents, manages concurrency.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Evelyn</span>
+            <span class="agent-role">Evaluator</span>
+            <p class="agent-desc">Judges output quality against criteria. The automated reviewer.</p>
+          </div>
+          <div class="agent-card">
+            <span class="agent-name">Sentinel</span>
+            <span class="agent-role">Security</span>
+            <p class="agent-desc">Reviews for vulnerabilities, dependency risk, and governance violations.</p>
+          </div>
+        </div>
       </div>
+    </section>
+
+    <!-- IMAGE DIVIDER — forge-review -->
+    <div class="image-divider">
+      <img src="images/forge-review.png" alt="">
+      <span class="image-divider-label">Forge — interwoven agent architecture</span>
     </div>
-  </section>
 
-  <!-- PRINCIPLES -->
-  <section>
-    <div class="container">
-      <p class="section-label animate">Design decisions</p>
-      <h2 class="animate d1"><em>Architecture</em> that won't bend under load.</h2>
-      <p class="section-intro animate d2">
-        The system was designed to hold its shape as it grows. These four constraints aren't incidental — they're what separates a development OS from a smarter task runner.
-      </p>
+    <!-- PRODUCTS -->
+    <section>
+      <div class="container">
+        <p class="section-label animate">Built by Forge</p>
+        <h2 class="animate d1">What the system is building.</h2>
+        <p class="section-intro animate d2">
+          Three products in active development — each built and iterated on through the same pipeline described above. Every ticket, test, and commit goes through Forge.
+        </p>
 
-      <div class="principles-grid animate d3">
-        <div class="principle-card">
-          <p class="principle-num">Constraint 01</p>
-          <p class="principle-title">Backlog as state machine</p>
-          <p class="principle-body">Not a task list. Tickets have states, transitions, guards, and owners. Ghost tickets and stale claims are structurally impossible — the schema enforces what process cannot.</p>
+        <div class="products-grid animate d3">
+          <a class="product-card" href="https://strata-work.com" target="_blank" rel="noopener">
+            <span class="product-tag">Active development</span>
+            <span class="product-name">Strata Work</span>
+            <p class="product-desc">An autonomous job search system. Eight agents, three-layer deduplication, fully local inference.</p>
+            <span class="product-link">strata-work.com ↗</span>
+          </a>
+          <a class="product-card" href="https://lifewithpatina.com" target="_blank" rel="noopener">
+            <span class="product-tag">In definition</span>
+            <span class="product-name">Life with Patina</span>
+            <p class="product-desc">Purchase intelligence and household management. Two consumer products designed and scoped through the same pipeline.</p>
+            <span class="product-link">lifewithpatina.com ↗</span>
+          </a>
+          <a class="product-card" href="https://genarch.dev" target="_blank" rel="noopener">
+            <span class="product-tag">Infrastructure</span>
+            <span class="product-name">GenArch</span>
+            <p class="product-desc">The intelligence layer — Alexandria, SLF, and Forge. The shared infrastructure across all Lexenne products.</p>
+            <span class="product-link">genarch.dev ↗</span>
+          </a>
         </div>
-        <div class="principle-card">
-          <p class="principle-num">Constraint 02</p>
-          <p class="principle-title">TDD, enforced mechanically</p>
-          <p class="principle-body">Tests are written before code. RED → GREEN → REFACTOR is the sequence. No exceptions, because the gate won't open on a red suite regardless of who's asking.</p>
-        </div>
-        <div class="principle-card">
-          <p class="principle-num">Constraint 03</p>
-          <p class="principle-title">Memory survives context limits</p>
-          <p class="principle-body">Session scratchpads, decision traces, and phase handoffs persist across context boundaries. Agents don't start cold — they pick up where the last one left off.</p>
-        </div>
-        <div class="principle-card">
-          <p class="principle-num">Constraint 04</p>
-          <p class="principle-title">Bounded authority, always</p>
-          <p class="principle-body">Every agent has a defined ceiling. No agent can approve its own work, claim outside its role, or skip review. Governance is baked into the routing layer, not the prompt.</p>
+
+        <div class="tile-strip animate d4">
+          <img src="images/forge-tile.png" alt="">
+          <span class="tile-strip-label">forge.v2 — active</span>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- AUTHORSHIP -->
-  <section>
-    <div class="container">
-      <p class="section-label animate">The builder</p>
-      <div class="about-inner">
-        <div>
-          <h2 class="about-name animate d1">Andrew Crenshaw</h2>
-          <p class="about-role animate d2">Founder, Lexenne</p>
-          <div class="about-body animate d3">
-            <p>I built autogenous-synthesis because I kept running into the same problem: enterprise software projects take too long, drift from their requirements, and lose institutional knowledge at every handoff. After 25 years in enterprise technology — and watching teams with access to good tools still ship slowly — I decided the constraint wasn't the tools. It was the workflow around them.</p>
-            <p>autogenous-synthesis is the result: a framework where specialized agents handle the repetitive mechanics of delivery — writing tests, reviewing code, updating documentation, sequencing the backlog — while humans stay in the loop at the decisions that actually matter. Every product in the Lexenne portfolio was built and is maintained by this system.</p>
+    <!-- PRINCIPLES -->
+    <section>
+      <div class="container">
+        <p class="section-label animate">Design decisions</p>
+        <h2 class="animate d1"><em>Architecture</em> that won't bend under load.</h2>
+        <p class="section-intro animate d2">
+          The system was designed to hold its shape as it grows. These four constraints aren't incidental — they're what separates a development OS from a smarter task runner.
+        </p>
+
+        <div class="principles-grid animate d3">
+          <div class="principle-card">
+            <p class="principle-num">Constraint 01</p>
+            <p class="principle-title">Backlog as state machine</p>
+            <p class="principle-body">Not a task list. Tickets have states, transitions, guards, and owners. Ghost tickets and stale claims are structurally impossible — the schema enforces what process cannot.</p>
           </div>
-        </div>
-        <div class="about-right animate d2">
-          <div class="about-deck">
-            <img src="images/forge-deck.png" alt="Forge architecture">
+          <div class="principle-card">
+            <p class="principle-num">Constraint 02</p>
+            <p class="principle-title">TDD, enforced mechanically</p>
+            <p class="principle-body">Tests are written before code. RED → GREEN → REFACTOR is the sequence. No exceptions, because the gate won't open on a red suite regardless of who's asking.</p>
           </div>
-          <div class="about-stat">
-            <div class="about-stat-num">3</div>
-            <div class="about-stat-label">Products built and maintained by the system — Strata Work, Life with Patina, GenArch</div>
+          <div class="principle-card">
+            <p class="principle-num">Constraint 03</p>
+            <p class="principle-title">Memory survives context limits</p>
+            <p class="principle-body">Session scratchpads, decision traces, and phase handoffs persist across context boundaries. Agents don't start cold — they pick up where the last one left off.</p>
           </div>
-          <div class="about-stat">
-            <div class="about-stat-num">700+</div>
-            <div class="about-stat-label">Automated tests run on every feature cycle. Nothing reaches done without a clean suite.</div>
-          </div>
-          <div class="about-stat">
-            <div class="about-stat-num">25 yrs</div>
-            <div class="about-stat-label">Enterprise technology experience — the problem this solves is one I watched accumulate for decades.</div>
+          <div class="principle-card">
+            <p class="principle-num">Constraint 04</p>
+            <p class="principle-title">Bounded authority, always</p>
+            <p class="principle-body">Every agent has a defined ceiling. No agent can approve its own work, claim outside its role, or skip review. Governance is baked into the routing layer, not the prompt.</p>
           </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- CTA -->
+    <!-- AUTHORSHIP -->
+    <section>
+      <div class="container">
+        <p class="section-label animate">The builder</p>
+        <div class="about-inner">
+          <div>
+            <h2 class="about-name animate d1">Andrew Crenshaw</h2>
+            <p class="about-role animate d2">Founder, Lexenne</p>
+            <div class="about-body animate d3">
+              <p>I built autogenous-synthesis because I kept running into the same problem: enterprise software projects take too long, drift from their requirements, and lose institutional knowledge at every handoff. After 25 years in enterprise technology — and watching teams with access to good tools still ship slowly — I decided the constraint wasn't the tools. It was the workflow around them.</p>
+              <p>autogenous-synthesis is the result: a framework where specialized agents handle the repetitive mechanics of delivery — writing tests, reviewing code, updating documentation, sequencing the backlog — while humans stay in the loop at the decisions that actually matter. Every product in the Lexenne portfolio was built and is maintained by this system.</p>
+            </div>
+          </div>
+          <div class="about-right animate d2">
+            <div class="about-deck">
+              <img src="images/forge-deck.png" alt="Forge architecture">
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-num">3</div>
+              <div class="about-stat-label">Products built and maintained — Strata Work, Life with Patina, GenArch</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-num">700+</div>
+              <div class="about-stat-label">Automated tests run on every feature cycle</div>
+            </div>
+            <div class="about-stat">
+              <div class="about-stat-num">25 yrs</div>
+              <div class="about-stat-label">Enterprise technology experience across delivery, architecture, and product</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /sections-cream -->
+
+  <!-- CTA — forge-review as dark bg -->
   <section class="cta-section">
     <div class="container">
       <p class="section-label animate">Get in touch</p>
