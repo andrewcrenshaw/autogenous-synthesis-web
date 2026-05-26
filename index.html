@@ -124,20 +124,34 @@
     }
 
     .wordmark-chip {
-      width: 20px;
-      height: 20px;
+      width: 22px;
+      height: 22px;
       flex-shrink: 0;
       display: block;
-      /* tint to phosphor green */
-      filter: brightness(0) invert(1) sepia(1) hue-rotate(100deg) saturate(3) brightness(0.85);
+      border-radius: 3px;
+      object-fit: cover;
     }
 
-    .wordmark-text {
+    .wordmark-forge {
       font-family: var(--mono);
-      font-size: 0.77rem;
+      font-size: 0.9rem;
       font-weight: 500;
-      color: #d4d0c8;
+      color: #edeae0;
       letter-spacing: -0.01em;
+    }
+
+    .wordmark-sep {
+      color: var(--gm-border);
+      font-size: 0.75rem;
+      margin: 0 0.1rem;
+    }
+
+    .wordmark-sub {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 400;
+      color: var(--gm-muted);
+      letter-spacing: 0.01em;
     }
 
     .header-link {
@@ -971,7 +985,9 @@
     <div class="header-inner">
       <a href="#" class="wordmark">
         <img src="images/forge-chip.png" alt="" class="wordmark-chip">
-        <span class="wordmark-text">autogenous-synthesis</span>
+        <span class="wordmark-forge">Forge</span>
+        <span class="wordmark-sep">·</span>
+        <span class="wordmark-sub">autogenous-synthesis</span>
       </a>
       <a href="https://www.lexenne.com" class="header-link" target="_blank" rel="noopener">
         A Lexenne project ↗
@@ -986,7 +1002,7 @@
         <div class="hero-layout">
 
           <div>
-            <p class="hero-eyebrow animate">Autonomous Development OS</p>
+            <p class="hero-eyebrow animate">Forge — Autonomous Development OS</p>
             <h1 class="animate d1">The system that <em>builds</em> the systems.</h1>
             <p class="hero-sub animate d2">
               An autonomous development OS — twelve specialized agents that plan, build, test, and ship code. The human sets direction and approves at gates. Everything else runs.
