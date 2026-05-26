@@ -303,7 +303,6 @@
       font-family: var(--mono);
       font-size: 0.77rem;
       line-height: 2;
-      max-width: 520px;
     }
 
     .t-prompt { color: var(--ph); font-weight: 500; }
@@ -1028,7 +1027,6 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       .hero-layout { grid-template-columns: 1fr; gap: 3rem; }
-      .hero-chip-panel { display: none; }
     }
 
     @media (max-width: 768px) {
@@ -1100,31 +1098,18 @@
                 <span class="stat-label">manual reviews</span>
               </div>
             </div>
-
-            <div class="animate d4">
-              <p class="terminal-caption">Every session starts the same way.</p>
-              <div class="terminal-block">
-                <div><span class="t-prompt">$</span> <span class="t-cmd">/session bob — build async notification relay</span></div>
-                <div class="t-out">→ registering session bob-2026-05-21-a3f8c2...</div>
-                <div class="t-out">→ scratchpad created, context loaded</div>
-                <div class="t-out">→ acceptance criteria: 3 verifiable gates</div>
-                <div class="t-ok">✓ SESSION STARTED — ready to build</div>
-                <div>&nbsp;</div>
-                <div><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
-              </div>
-            </div>
           </div>
 
-          <div class="hero-chip-panel animate d2">
-            <div class="hero-chip-frame">
-              <img src="images/forge-chip-isolated.png" alt="Forge chip — autonomous development runtime">
-            </div>
-            <div class="hero-chip-meta">
-              <span class="hero-chip-label">forge-chip.v2 — agent dispatch runtime</span>
-              <span class="hero-chip-status">
-                <span class="status-dot"></span>
-                online
-              </span>
+          <div class="animate d3">
+            <p class="terminal-caption">Every session starts the same way.</p>
+            <div class="terminal-block">
+              <div><span class="t-prompt">$</span> <span class="t-cmd">/session bob — build async notification relay</span></div>
+              <div class="t-out">→ registering session bob-2026-05-21-a3f8c2...</div>
+              <div class="t-out">→ scratchpad created, context loaded</div>
+              <div class="t-out">→ acceptance criteria: 3 verifiable gates</div>
+              <div class="t-ok">✓ SESSION STARTED — ready to build</div>
+              <div>&nbsp;</div>
+              <div><span class="t-prompt">$</span> <span class="t-cursor"></span></div>
             </div>
           </div>
 
